@@ -1,15 +1,27 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import { Request, Response, Router } from 'express';
 import path from 'path';
 import { logger } from './middleware/logger';
+import { errorHandler } from './middleware/errorHandler';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import { corsOptions }  from './config/corsOptions';
 
+dotenv.config();
 
+// Obs: the .env must is in `/` together with 'package.json'
+console.log(process.env.NODE_ENV);
 
 const app = express(); // Start the express server 
-const port =  process.env.PORT || 3000; // To get the port from .env config
+const port =  process.env.PORT || 3500; // To get the port from .env config
+
+app.use(cors(corsOptions)); // To allow cross-origin requests
 
 app.use(logger); // Using the logger middleware to log the request method, url and origin
 app.use(express.json()); // This allow we using json in our application
+app.use(cookieParser());  // 
+
 
 app.use('/', express.static(path.join(__dirname, 'public'))); // here we're using public folder where the css content is
 app.use('/', require('./routes/routes')); // using the routes.ts to mapping the routes of our application
@@ -35,6 +47,8 @@ app.all('*', (req : Request, res : Response) => {
 
 });
 
+
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Server running on ${port}`);
