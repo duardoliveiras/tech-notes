@@ -1,19 +1,17 @@
 import express from 'express';
 import { Request, Response, Router } from 'express';
+import path from 'path';
 
 
 
-const app = express();
-const route = Router();
-const port =  process.env.PORT || 3000;
+const app = express(); // Start the express server 
+const port =  process.env.PORT || 3000; // To get the port from .env config
 
 app.use(express.json());
 
-route.get("/", (req : Request, res : Response) => {
-    res.json({ message: "Hello World!"});
-})
+app.use('/', express.static(path.join(__dirname, '/public'))); // here we're using public folder where is the css content
+app.use('/', require('./routes/routes')); // using the routes.ts to mapping the routes of our application
 
-app.use(route);
 
 app.listen(port, () => {
     console.log(`Server running on ${port}`);
