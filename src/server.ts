@@ -1,15 +1,17 @@
 import express from 'express';
 import { Request, Response, Router } from 'express';
 import path from 'path';
+import { logger } from './middleware/logger';
 
 
 
 const app = express(); // Start the express server 
 const port =  process.env.PORT || 3000; // To get the port from .env config
 
-app.use(express.json());
+app.use(logger); // Using the logger middleware to log the request method, url and origin
+app.use(express.json()); // This allow we using json in our application
 
-app.use('/', express.static(path.join(__dirname, '/public'))); // here we're using public folder where the css content is
+app.use('/', express.static(path.join(__dirname, 'public'))); // here we're using public folder where the css content is
 app.use('/', require('./routes/routes')); // using the routes.ts to mapping the routes of our application
 
 
