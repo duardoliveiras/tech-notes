@@ -1,9 +1,9 @@
 import mongoose, {model, Schema} from "mongoose";
 
-interface IUser extends Document {
+export interface IUser extends Document {
     username: string;
     password: string;
-    role: string[];
+    roles: string[];
     active: boolean;
 
 }
@@ -18,7 +18,7 @@ export const userSchema : Schema<IUser> = new Schema({
         type: String,
         required: true
     },
-    role: [{
+    roles: [{
         type: String,
         deafult: "Employee"
     }],

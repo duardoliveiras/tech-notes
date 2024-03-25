@@ -9,6 +9,7 @@ import cors from 'cors';
 import { corsOptions }  from './config/corsOptions';
 import { connectDB } from './config/dbConn';
 import mongoose from 'mongoose';
+import userRoutes from './routes/userRoutes';
 
 const envPath = path.resolve(
     __dirname,
@@ -24,11 +25,12 @@ app.use(cors(corsOptions)); // To allow cross-origin requests
 
 app.use(logger); // Using the logger middleware to log the request method, url and origin
 app.use(express.json()); // This allow we using json in our application
-app.use(cookieParser());  // 
+app.use(cookieParser());  // This allow we using cookies in our application
 
 
 app.use('/', express.static(path.join(__dirname, 'public'))); // here we're using public folder where the css content is
 app.use('/', require('./routes/routes')); // using the routes.ts to mapping the routes of our application
+app.use('/users', userRoutes); // using the users.ts to mapping the routes of our application
 
 // .all is used for mapping all request methods (post,get,put e etc)
 // '*' is used to represent all possible routes. That way, if the user try access a unmapped route we returns the 404 not found
